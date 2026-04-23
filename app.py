@@ -3,6 +3,7 @@
 # activate environment
 # myenv\Scripts\activate
 # pip install streamlit scikit-learn pandas seaborn numpy
+# redeploy
 import pickle
 import streamlit as st
 import pandas as pd
