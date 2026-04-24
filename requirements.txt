@@ -5,3 +5,4 @@ numpy==1.23.5
 seaborn==0.12.2
 matplotlib==3.7.1
 xgboost==1.6.2
+setuptools==65.5.0
