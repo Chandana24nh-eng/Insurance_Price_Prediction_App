@@ -1,18 +1,17 @@
 # create environment for windows
 # python -m venv env
 # activate environment
-# myenv\Scripts\activate
+# env\Scripts\activate
 # pip install streamlit scikit-learn pandas seaborn numpy
-# redeploy
 import pickle
 import streamlit as st
 import pandas as pd
-import seaborn as sns
+
 import numpy as np
 from sklearn.preprocessing import StandardScaler
 
 # load model
-model=pickle.load(open('model.pkl','rb'))
+model=pickle.load(open('gb_model.pkl','rb'))
 
 # initalize scaler used in insurance price prediction model
 scaler=StandardScaler()
