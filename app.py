@@ -1,8 +1,3 @@
-# create environment for windows
-# python -m venv env
-# activate environment
-# env\Scripts\activate
-# pip install streamlit scikit-learn pandas seaborn numpy
 import pickle
 import streamlit as st
 import pandas as pd
@@ -13,7 +8,7 @@ from sklearn.preprocessing import StandardScaler
 # load model
 model=pickle.load(open('gb_model.pkl','rb'))
 
-# initalize scaler used in insurance price prediction model
+# initalize scaler 
 scaler=StandardScaler()
 
 # to give title
@@ -40,7 +35,7 @@ sex_male = 1 if gender == 'male' else 0
 region_dict = {'southeast': 3, 'northeast': 2, 'northwest': 1, 'southwest': 0}
 Region = region_dict[region]
 
-# create dataframe that includes all the variables -->should be same as in the data of the insurance price prediction model,[54]th row
+# create dataframe that includes all the variables 
 input_features = pd.DataFrame({
     'age':[age],
     'bmi':[bmi],
@@ -52,7 +47,7 @@ input_features = pd.DataFrame({
 })
 
 # apply scaling
-#input_features[['age','bmi']]=scaler.fit_transform(input_features[['age','bmi']])
+input_features[['age','bmi']]=scaler.fit_transform(input_features[['age','bmi']])
 
 # make predictions
 if st.button('Predict'):
