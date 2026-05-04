@@ -2,9 +2,16 @@ import os
 import pickle
 import streamlit as st
 import pandas as pd
-import seaborn as sns
 import numpy as np
-from sklearn.preprocessing import StandardScaler
+
+# ---------------- PATH SETUP ---------------- #
+BASE_DIR = os.path.dirname(__file__)
+model_path = os.path.join(BASE_DIR, 'gb_model.pkl')
+scaler_path = os.path.join(BASE_DIR, 'scaler.pkl')
+
+# ---------------- LOAD MODEL & SCALER ---------------- #
+model = pickle.load(open(model_path, 'rb'))
+scaler = pickle.load(open(scaler_path, 'rb'))
 
 # ---------------- UI CONFIG ---------------- #
 st.set_page_config(page_title="Insurance Predictor", page_icon="💰", layout="centered")
@@ -12,47 +19,13 @@ st.set_page_config(page_title="Insurance Predictor", page_icon="💰", layout="c
 # ---------------- CUSTOM CSS ---------------- #
 st.markdown("""
 <style>
-.main {
-    background-color: #0e1117;
-}
-.title {
-    text-align:center;
-    font-size:32px;
-    font-weight:bold;
-    color:#00c6ff;
-}
-.subtitle {
-    text-align:center;
-    color:gray;
-    margin-bottom:20px;
-}
-.card {
-    background:#1c1f26;
-    padding:20px;
-    border-radius:12px;
-    box-shadow: 0px 4px 15px rgba(0,0,0,0.4);
-}
-.result {
-    background: linear-gradient(90deg,#00c6ff,#0072ff);
-    padding:20px;
-    border-radius:12px;
-    text-align:center;
-    color:white;
-    font-size:24px;
-    font-weight:bold;
-}
+.main {background-color: #0e1117;}
+.title {text-align:center;font-size:32px;font-weight:bold;color:#00c6ff;}
+.subtitle {text-align:center;color:gray;margin-bottom:20px;}
+.card {background:#1c1f26;padding:20px;border-radius:12px;box-shadow:0px 4px 15px rgba(0,0,0,0.4);}
+.result {background: linear-gradient(90deg,#00c6ff,#0072ff);padding:20px;border-radius:12px;text-align:center;color:white;font-size:24px;font-weight:bold;}
 </style>
 """, unsafe_allow_html=True)
-
-
-
-model_path = os.path.join(os.path.dirname(__file__), 'gb_model.pkl')
-
-# ---------------- LOAD MODEL ---------------- #
-model = pickle.load(open('gb_model.pkl','rb'))
-
-# scaler
-scaler = StandardScaler()
 
 # ---------------- HEADER ---------------- #
 st.markdown('<div class="title">💰 Insurance Price Prediction</div>', unsafe_allow_html=True)
@@ -74,7 +47,6 @@ with col2:
     region = st.selectbox('Region', ('southwest','southeast','northwest','northeast'))
 
 st.markdown('</div>', unsafe_allow_html=True)
-
 st.markdown("<br>", unsafe_allow_html=True)
 
 # ---------------- ENCODING ---------------- #
@@ -82,26 +54,27 @@ Smoker = 1 if smoker == 'yes' else 0
 sex_female = 1 if gender == 'female' else 0
 sex_male = 1 if gender == 'male' else 0
 
-region_dict = {'southeast':3,'northeast':2,'northwest':1,'southwest':0}
+region_dict = {'southwest':0, 'northwest':1, 'northeast':2, 'southeast':3}
 Region = region_dict[region]
 
 # ---------------- DATAFRAME ---------------- #
 input_features = pd.DataFrame({
-    'age':[age],
-    'bmi':[bmi],
-    'children':[children],
-    'Smoker':[Smoker],
-    'sex_female':[sex_female],
-    'sex_male':[sex_male],
-    'Region':[Region]
+    'age': [age],
+    'bmi': [bmi],
+    'children': [children],
+    'Smoker': [Smoker],
+    'sex_female': [sex_female],
+    'sex_male': [sex_male],
+    'Region': [Region]
 })
 
-input_features[['age','bmi']] = scaler.fit_transform(input_features[['age','bmi']])
+# ---------------- APPLY SCALING ---------------- #
+input_features[['age','bmi']] = scaler.transform(input_features[['age','bmi']])
 
 # ---------------- BUTTON ---------------- #
 if st.button('🚀 Predict Price', use_container_width=True):
 
-    # feature alignment fix (kept minimal)
+    # Ensure correct feature order
     try:
         model_features = model.feature_names_in_
         for col in model_features:
@@ -111,17 +84,19 @@ if st.button('🚀 Predict Price', use_container_width=True):
     except:
         pass
 
-    predictions = model.predict(input_features)
-    output = round(np.exp(predictions[0]), 2)
+    # Prediction
+    prediction = model.predict(input_features)
 
+    # Convert back if log transformation used
+    output = round(np.exp(prediction[0]), 2)
+
+    # Display result
     st.markdown("<br>", unsafe_allow_html=True)
-
-    # RESULT BOX
     st.markdown(f'<div class="result">Estimated Cost: ${output:,.2f}</div>', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
-    # STATUS
+    # Extra info
     col1, col2 = st.columns(2)
 
     with col1:
