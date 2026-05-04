@@ -1,3 +1,4 @@
+import os
 import pickle
 import streamlit as st
 import pandas as pd
@@ -42,6 +43,10 @@ st.markdown("""
 }
 </style>
 """, unsafe_allow_html=True)
+
+
+
+model_path = os.path.join(os.path.dirname(__file__), 'gb_model.pkl')
 
 # ---------------- LOAD MODEL ---------------- #
 model = pickle.load(open('gb_model.pkl','rb'))
