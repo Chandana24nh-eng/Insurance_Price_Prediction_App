@@ -1,6 +1,5 @@
-numpy==2.4.4
-scikit-learn==1.8.0
-pandas
 streamlit
-
-
+pandas
+numpy
+scikit-learn
+seaborn
