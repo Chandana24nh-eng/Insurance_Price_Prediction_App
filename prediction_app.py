@@ -92,7 +92,7 @@ if st.button('🚀 Predict Price', use_container_width=True):
 
     # Display result
     st.markdown("<br>", unsafe_allow_html=True)
-    st.markdown(f'<div class="result">Estimated Cost: ${output:,.2f}</div>', unsafe_allow_html=True)
+    st.markdown(f'<div class="result">Estimated Cost: ₹{output:,.2f}</div>', unsafe_allow_html=True)
 
     st.markdown("<br>", unsafe_allow_html=True)
 
