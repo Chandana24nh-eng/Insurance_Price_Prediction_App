@@ -22,13 +22,12 @@ st.markdown("""
 .main {background-color: #0e1117;}
 .title {text-align:center;font-size:32px;font-weight:bold;color:#00c6ff;}
 .subtitle {text-align:center;color:gray;margin-bottom:20px;}
-.card {background:#1c1f26;padding:20px;border-radius:12px;box-shadow:0px 4px 15px rgba(0,0,0,0.4);}
 .result {background: linear-gradient(90deg,#00c6ff,#0072ff);padding:20px;border-radius:12px;text-align:center;color:white;font-size:24px;font-weight:bold;}
 </style>
 """, unsafe_allow_html=True)
 
 # ---------------- HEADER ---------------- #
-st.markdown('<div class="title">💰 Insurance Price Prediction</div>', unsafe_allow_html=True)
+st.markdown('<div class="title">💰 Health Insurance Price Prediction</div>', unsafe_allow_html=True)
 st.markdown('<div class="subtitle">Enter details to estimate cost</div>', unsafe_allow_html=True)
 
 # ---------------- INPUT CARD ---------------- #
